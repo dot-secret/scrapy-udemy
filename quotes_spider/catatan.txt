@@ -1,0 +1,45 @@
+scrapy shell
+fetch("nama_situs") => status pada link / mengecek situs apakah bisa di scraping jika kode 200 berarti bisa dilakukan
+response => cek kode URL
+response.xpath('//selector_html') => untuk mendapatkan tag html yang akan di select
+response.xpath('//selector_html/text()') => untuk mendapatkan tag html yang akan di select dan menampilkan hasilnya di terminal
+response.xpath('//selector_html/text()').extract() => untuk mendapatkan tag html yang akan di select dan menampilkan hasilnya di terminal
+hanya text/ string saja yang dihasilkannya
+
+response.xpath('//selector_html/text()').extract_first() => untuk mendapatkan tag html yang akan di select dan menampilkan hasilnya di terminal
+hanya text/ string saja yang dihasilkannya pada string pertama
+response.xpath('//*[@class="nama_class"]') => untuk mendapatkan tag html dengan class
+len(response.xpath('//*[@class="nama_class"]')) => untuk mendapatkan tag html dengan class dan hitung banyaknya
+
+scrapy crawl
+scrapy crawl nama_project
+ROBOSTXT_OBEY. harus dalam keadaan False
+ROBOSTXT_OBEY = False
+
+
+untuk menangkap data perulangan dengan tag class
+kita coba potong menggunakan variabel pada scrapy shell
+contoh pertama tangkap berdasarkan nama classnya
+1. response.xpath('//*[@class="nama_class"]')
+tampung dengan variabel
+2. quotes = response.xpath('//*[@class="nama_class"]')
+tampung variabel plural tadi menjadi  secara singular dari variabel quotes tadi
+3. quote = quotes[0]
+mengeluarkan data yang berdasarkan class tadi dengan cara
+4. quote.xpath('.//a')
+perbedaannya ada terletak tanda titik sebelum garis miring (/) harus disertakan terlebih dulu
+ menangkap bagian dari container class
+ quote.xpath('.//*[@class="text "]')
+
+menangani paginations
+1. tinggal tangkap berdasarkan class dan ambil data sampai clean / bersih
+response.xpath('//*[@class="next]"/a/@href').extarct_first()
+2. tampung pada variabel
+next_page_url = response.xpath('//*[@class="next]"/a/@href').extarct_first()
+3. gunakan fungsi urljoin
+response.urljoin(next_page_url)
+4.tampung dibagian fungsi urljoin agar bisa di muat pada fungsi yield
+absolute_next_page_url= response.urljoin(next_page_url)
+yield scrapy.Request(absolute_next_page_url)
+
+
